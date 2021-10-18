@@ -11,4 +11,4 @@
 
 <h3>DISCLAIMER</h3>
 
-> This script has few of abilities on a web server,some of them might be harmful,if you are decided to use this script,you have to know that script's author does not takes any responsibility on any harmful use
+> This script has few of abilities on a web server some of them might be harmful,if you have decided to use this script,you have to know that script's author does not takes any responsibility on any harmful use
