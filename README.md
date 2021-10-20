@@ -6,7 +6,7 @@
 
 <h3>Screens</h3>
 
-<img src="https://i.hizliresim.com/8977ell.png" />
+<img src="https://i.hizliresim.com/8977ell.png" style="background-size:cover;object-fit:cover"/>
 
 
 <h3>DISCLAIMER</h3>
