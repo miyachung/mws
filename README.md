@@ -2,9 +2,10 @@
 
 
 <i>A php & javascript based web shell with 404 not found page</i>
-
-<strong>With v1.2 update , miyachung webshell is now going to show 404 not found page until SHIFT + ENTER Key combination used</strong><br/>
+<hr>
+<strong>Miyachung webshell is now going to show 404 not found page until SHIFT + ENTER Key combination used</strong><br/>
 <i>ps: Use SHIFT + Enter Key combination to log in to shell</i>
+<hr>
 
 
 <h3>Screens</h3>
