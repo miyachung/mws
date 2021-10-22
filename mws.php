@@ -1063,7 +1063,7 @@ $content = '<!DOCTYPE html>
 <h1 style="margin:0;padding:0">Not Found</h1>
 <p>The requested URL was not found on this server.</p>
 <hr>
-<address>'.@apache_getenv('SERVER_SOFTWARE').' Server at '.@apache_getenv("SERVER_ADDR").' Port 80</address>
+<address>'.@$_SERVER['SERVER_SOFTWARE'].' Server at '.@$_SERVER["SERVER_ADDR"].' Port 80</address>
 
 <script>
 
