@@ -1,6 +1,5 @@
 # mws
 <i>A php & javascript based web shell</i>
-<hr>
 <h3>Screens</h3>
 <hr>
 
